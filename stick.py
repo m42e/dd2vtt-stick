@@ -98,14 +98,14 @@ class Canvas(object):
             width = size["x"]
             height = count * size["y"]
             for f in range(len(self.files)):
-                self.files[f]["pos_in_image"] = {"y": 0, "x": f * size["y"]}
+                self.files[f]["pos_in_image"] = {"x": 0, "y": f * size["y"]}
             self.gridw = grid_size["x"]
             self.gridh = count * grid_size["y"]
         elif self.mode == "x":
             width = count * size["x"]
             height = size["y"]
             for f in range(len(self.files)):
-                self.files[f]["pos_in_image"] = {"x": 0, "y": f * size["x"]}
+                self.files[f]["pos_in_image"] = {"y": 0, "x": f * size["x"]}
             self.gridw = count * grid_size["x"]
             self.gridh = grid_size["y"]
         self.canvas = Image.new(size=(width, height), mode="RGBA")
