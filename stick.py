@@ -34,6 +34,7 @@ def parse_args(args=None):
     parser.add_argument(
         "-o", "--output", type=str, help="output filename", default="combined.dd2vtt"
     )
+    parser.add_argument("-p", "--png", action='store_true', help="use webp images")
     return parser.parse_args(args)
 
 
@@ -52,7 +53,7 @@ def read_file(file):
 
 
 class Canvas(object):
-    def __init__(self, files, mode):
+    def __init__(self, files, mode, image_type="PNG"):
         self.files = files
         self.mode = mode
         self.create_canvas()
@@ -131,7 +132,7 @@ class Canvas(object):
                 ),
             )
         self.canvas_io = io.BytesIO()
-        self.canvas.save(self.canvas_io, "WEBP")
+        self.canvas.save(self.canvas_io, image_type)
 
     def transform_information(self):
         self.information = {
@@ -188,7 +189,11 @@ def main():
     if args.horizontal:
         mode = "x"
 
-    c = Canvas(files, mode)
+    image_type = "WEBP"
+    if args.png:
+        image_type = "PNG"
+
+    c = Canvas(files, mode, image_type=image_type)
     c.save(args.output)
 
 
