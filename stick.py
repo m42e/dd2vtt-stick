@@ -164,6 +164,13 @@ class Canvas(object):
                 port["position"]["y"] += f["pos_in_grid"]["y"]
 
             self.information["line_of_sight"].extend(f["line_of_sight"])
+            self.information["line_of_sight"].append([
+                {'x': f['pos_in_grid']['x'], 'y': f['pos_in_grid']['y']},
+                {'x': f['pos_in_grid']['x'] + f['resolution']['map_size']['x'], 'y': f['pos_in_grid']['y']},
+                {'x': f['pos_in_grid']['x'] + f['resolution']['map_size']['x'], 'y': f['pos_in_grid']['y'] + f['resolution']['map_size']['y']},
+                {'x': f['pos_in_grid']['x'], 'y': f['pos_in_grid']['y'] + f['resolution']['map_size']['y']},
+                {'x': f['pos_in_grid']['x'], 'y': f['pos_in_grid']['y']},
+            ])
             self.information["portals"].extend(f["portals"])
             self.information["lights"].extend(f["lights"])
 
