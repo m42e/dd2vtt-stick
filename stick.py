@@ -34,7 +34,13 @@ def parse_args(args=None):
     parser.add_argument(
         "-o", "--output", type=str, help="output filename", default="combined.dd2vtt"
     )
-    parser.add_argument("-p", "--png", action='store_true', help="use webp images")
+    parser.add_argument("-p", "--png", action="store_true", help="use webp images")
+    parser.add_argument(
+        "-l",
+        "--largest",
+        action="store_true",
+        help="use largest image as size, else the size of the first will be used",
+    )
     return parser.parse_args(args)
 
 
@@ -53,17 +59,26 @@ def read_file(file):
 
 
 class Canvas(object):
-    def __init__(self, files, mode, image_type="PNG"):
+    def __init__(self, files, mode, image_type="PNG", size_mode="first"):
         self.image_type = image_type
         self.files = files
         self.mode = mode
+        self.size_mode = size_mode
         self.create_canvas()
         self.add_images()
         self.transform_information()
         self.finalize()
 
     def create_canvas(self):
-        size = self.files[0]["resolution"]["map_size"]
+        size = {"y": 0, "x": 0}
+        if self.size_mode == "first":
+            size["x"] = self.files[0]["resolution"]["map_size"]["x"]
+            size["y"] = self.files[0]["resolution"]["map_size"]["y"]
+        else:
+            for file in self.files:
+                size["x"] = max(size["x"], file["resolution"]["map_size"]["x"])
+                size["y"] = max(size["y"], file["resolution"]["map_size"]["y"])
+
         grid_size = copy.copy(size)
         size["x"] = size["x"] * self.files[0]["resolution"]["pixels_per_grid"]
         size["y"] = size["y"] * self.files[0]["resolution"]["pixels_per_grid"]
@@ -165,13 +180,24 @@ class Canvas(object):
                 port["position"]["y"] += f["pos_in_grid"]["y"]
 
             self.information["line_of_sight"].extend(f["line_of_sight"])
-            self.information["line_of_sight"].append([
-                {'x': f['pos_in_grid']['x'], 'y': f['pos_in_grid']['y']},
-                {'x': f['pos_in_grid']['x'] + f['resolution']['map_size']['x'], 'y': f['pos_in_grid']['y']},
-                {'x': f['pos_in_grid']['x'] + f['resolution']['map_size']['x'], 'y': f['pos_in_grid']['y'] + f['resolution']['map_size']['y']},
-                {'x': f['pos_in_grid']['x'], 'y': f['pos_in_grid']['y'] + f['resolution']['map_size']['y']},
-                {'x': f['pos_in_grid']['x'], 'y': f['pos_in_grid']['y']},
-            ])
+            self.information["line_of_sight"].append(
+                [
+                    {"x": f["pos_in_grid"]["x"], "y": f["pos_in_grid"]["y"]},
+                    {
+                        "x": f["pos_in_grid"]["x"] + f["resolution"]["map_size"]["x"],
+                        "y": f["pos_in_grid"]["y"],
+                    },
+                    {
+                        "x": f["pos_in_grid"]["x"] + f["resolution"]["map_size"]["x"],
+                        "y": f["pos_in_grid"]["y"] + f["resolution"]["map_size"]["y"],
+                    },
+                    {
+                        "x": f["pos_in_grid"]["x"],
+                        "y": f["pos_in_grid"]["y"] + f["resolution"]["map_size"]["y"],
+                    },
+                    {"x": f["pos_in_grid"]["x"], "y": f["pos_in_grid"]["y"]},
+                ]
+            )
             self.information["portals"].extend(f["portals"])
             self.information["lights"].extend(f["lights"])
 
@@ -201,7 +227,11 @@ def main():
     if args.png:
         image_type = "PNG"
 
-    c = Canvas(files, mode, image_type=image_type)
+    size_mode = "first"
+    if args.largest:
+        size_mode = "largest"
+
+    c = Canvas(files, mode, image_type=image_type, size_mode=size_mode)
     c.save(args.output)
 
 
