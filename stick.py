@@ -34,7 +34,7 @@ def parse_args(args=None):
     parser.add_argument(
         "-o", "--output", type=str, help="output filename", default="combined.dd2vtt"
     )
-    parser.add_argument("-p", "--png", action="store_true", help="use webp images")
+    parser.add_argument("-p", "--png", action="store_true", help="use png images")
     parser.add_argument(
         "-l",
         "--largest",
