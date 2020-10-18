@@ -40,7 +40,7 @@ optional arguments:
   -g, --grid            stitch in a grid
   -o OUTPUT, --output OUTPUT
                         output filename
-  -p, --png             use webp images
+  -p, --png             use png images
   -l, --largest         use largest image as size, else the size of the first
                         will be used
 ```
