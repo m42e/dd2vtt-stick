@@ -54,6 +54,7 @@ def read_file(file):
 
 class Canvas(object):
     def __init__(self, files, mode, image_type="PNG"):
+        self.image_type = image_type
         self.files = files
         self.mode = mode
         self.create_canvas()
@@ -132,7 +133,7 @@ class Canvas(object):
                 ),
             )
         self.canvas_io = io.BytesIO()
-        self.canvas.save(self.canvas_io, image_type)
+        self.canvas.save(self.canvas_io, self.image_type)
 
     def transform_information(self):
         self.information = {
