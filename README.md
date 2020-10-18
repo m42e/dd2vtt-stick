@@ -28,7 +28,7 @@ If this does not print error messages you are good to go and see the next step
 ## Usage (for those who know about python and stuff)
 
 ```
-usage: stick.py [-h] (-y | -x | -g) [-o OUTPUT] files [files ...]
+usage: stick.py [-h] (-y | -x | -g) [-o OUTPUT] [-p] [-l] files [files ...]
 
 positional arguments:
   files                 dd2vtt files to stitch together
@@ -38,10 +38,13 @@ optional arguments:
   -y, --vertical        stitch vertical
   -x, --horizontal      stitch horizontal
   -g, --grid            stitch in a grid
-  -p, --png             use PNG output
   -o OUTPUT, --output OUTPUT
                         output filename
+  -p, --png             use webp images
+  -l, --largest         use largest image as size, else the size of the first
+                        will be used
 ```
+
 
 ### Example
 
