@@ -38,6 +38,7 @@ optional arguments:
   -y, --vertical        stitch vertical
   -x, --horizontal      stitch horizontal
   -g, --grid            stitch in a grid
+  -p, --png             use PNG output
   -o OUTPUT, --output OUTPUT
                         output filename
 ```
@@ -47,3 +48,10 @@ optional arguments:
 ```bash
 ./stick.py -g church1.dd2vtt church2.dd2vtt church3.dd2vtt church4.dd2vtt
 ```
+
+
+## Notes
+
+- For MapTool please use the `-p` as MapTool does not support the default WEBP format.
+- At the moment all images are assumed to have the same size as the *first* one. It yours differ in size, provide the largest one first. Else things may overlap.
+
